@@ -4,36 +4,68 @@
 #include "Vector3.h"
 #include "CelestialBody.h"
 
-CelestialBody::CelestialBody(std::string name, long long mass, double x, double y, double z, std::string units)
-: name(name), mass(mass), position(Vector3(x,y,z,units))
+CelestialBody::CelestialBody(std::string name, double mass, double x, double y, double z, std::string units_position)
+: name(name), mass(mass), position(Vector3(x,y,z,units_position, "Position")), acceleration(0,0,0, "", "Acceleration"), velocity(0,0,0, "", "Velocity")
 {
 }
-CelestialBody::CelestialBody(std::string name, long long mass, std::string units)
-: name(name), mass(mass), position(Vector3(0,0,0,units))
+CelestialBody::CelestialBody(std::string name, double mass, std::string units)
+: name(name), mass(mass), position(Vector3(0,0,0,units, "Position")), acceleration(0,0,0, "", "Acceleration"), velocity(0,0,0, "", "Velocity")
 {
 }
-CelestialBody::CelestialBody(std::string name, long long mass, std::string units, double speed)
-: name(name), mass(mass), position(Vector3(0,0,0,units))
-{
-    set_tangential_speed(speed);
+
+Vector3 CelestialBody::get_velocity() const{
+    return velocity;
 }
-CelestialBody::CelestialBody(std::string name, long long mass, double x, double y, double z, std::string units, double speed)
-: name(name), mass(mass), position(Vector3(x,y,z,units))
-{
-    set_tangential_speed(speed);
+Vector3 CelestialBody::get_acceleration() const{
+    return acceleration;
 }
-void CelestialBody::set_tangential_speed(double speed){
-    tangential_speed=speed;
+Vector3 CelestialBody::get_position() const{
+    return position;
 }
+double CelestialBody::get_mass() const{
+    return mass;
+}
+void CelestialBody::set_mass(double mass){
+    this->mass=mass;
+}
+void CelestialBody::set_units_mass(std::string units_mass){
+    this->units_mass=units_mass;
+}
+void CelestialBody::set_velocity(double x, double y, double z, std::string units_velocity){
+    velocity.adjust(x,y,z);
+    velocity.setUnits(units_velocity);
+}
+void CelestialBody::set_velocity(double x, double y, double z){
+    velocity.adjust(x,y,z);
+}
+void CelestialBody::set_acceleration(double x, double y, double z, std::string units_acceleration){
+    acceleration.adjust(x,y,z);
+    acceleration.setUnits(units_acceleration);
+}
+void CelestialBody::set_acceleration(double x, double y, double z){
+    acceleration.adjust(x,y,z);
+}
+void CelestialBody::update_position(double x, double y, double z, std::string units_position){
+    position.adjust(x,y,z);
+    position.setUnits(units_position);
+}
+
 void CelestialBody::update_position(double x, double y, double z){
-        position.adjust(x,y,z);
-    }
+    position.adjust(x,y,z);
+}
+
+double CelestialBody::get_gravitational_force(const CelestialBody& other, double distance) const{
+    return G * this->mass * other.get_mass() / distance / distance;
+}
+
+
 
 std::ostream& operator<<(std:: ostream& os, const CelestialBody& s){
     return os << 
         "Name: " << s.name << "\n" <<
         "Mass: " << s.mass << "\n" <<
-        "Tangential Speed: " << s.tangential_speed << "\n" <<
+        "Velocity: " << s.velocity << "\n" <<
+        "Acceleration: " << s.acceleration << "\n" <<
         "Position: " << s.position << "\n"
     ;
 }

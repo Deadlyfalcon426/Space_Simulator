@@ -2,19 +2,35 @@
 #include <vector>
 #include <string>
 #include "Vector3.h"
+#include <cmath>
 #pragma once
 class CelestialBody {
     private:
         std::string name;
-        long long mass;
-        double tangential_speed;
+        double mass;
+        Vector3 acceleration;
+        Vector3 velocity;
         Vector3 position;
+        std::string units_mass;
     public:
-        CelestialBody(std::string name, long long mass, double x, double y, double z, std::string units);
-        CelestialBody(std::string name, long long mass, std::string units);
-        CelestialBody(std::string name, long long mass, std::string units, double tangential_speed);
-        CelestialBody(std::string name, long long mass, double x, double y, double z, std::string units, double speed);
-        void set_tangential_speed(double speed);
+        const double G = 6.67430*std::pow(10, -11);
+        CelestialBody(std::string name, double mass, double x, double y, double z, std::string units);
+        CelestialBody(std::string name, double mass, std::string units);
+        
+        Vector3 get_velocity() const;
+        Vector3 get_acceleration() const;
+        Vector3 get_position() const;
+        double get_mass() const;
+        void set_mass(double mass);
+        void set_units_mass(std::string new_units);
+        void set_velocity(double x, double y, double z, std::string units_velocity);
+        void set_velocity(double x, double y, double z);
+        void set_acceleration(double x, double y, double z, std::string units_acceleration);
+        void set_acceleration(double x, double y, double z);
+        void update_position(double x, double y, double z, std::string units_position);
         void update_position(double x, double y, double z);
+
+        double get_gravitational_force(const CelestialBody& other, double distance) const;
+
         friend std::ostream& operator<<(std:: ostream& os, const CelestialBody& s);
 };
