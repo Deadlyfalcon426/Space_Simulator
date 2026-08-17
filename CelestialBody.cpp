@@ -54,8 +54,15 @@ void CelestialBody::update_position(double x, double y, double z){
     position.adjust(x,y,z);
 }
 
-double CelestialBody::get_gravitational_force(const CelestialBody& other, double distance) const{
-    return G * this->mass * other.get_mass() / distance / distance;
+Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other) const{
+    double distance = position.distanceTo(other.get_position());
+    double g_force_combine = G * this->mass * other.get_mass() / distance / distance;
+    Vector3 diff = position.difference(other.get_position());
+    double new_x = diff.getX()/g_force_combine;
+    double new_y = diff.getY()/g_force_combine;
+    double new_z = diff.getZ()/g_force_combine;
+    Vector3 new_g_force = Vector3(new_x,new_y,new_z,other.get_position().getUnits(), "Force");
+    return new_g_force;
 }
 
 

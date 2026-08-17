@@ -14,8 +14,8 @@ class CelestialBody {
         std::string units_mass;
     public:
         const double G = 6.67430*std::pow(10, -11);
-        CelestialBody(std::string name, double mass, double x, double y, double z, std::string units);
-        CelestialBody(std::string name, double mass, std::string units);
+        CelestialBody(std::string name, double mass, double x, double y, double z, std::string units_position);
+        CelestialBody(std::string name, double mass, std::string units_position);
         
         Vector3 get_velocity() const;
         Vector3 get_acceleration() const;
@@ -30,7 +30,7 @@ class CelestialBody {
         void update_position(double x, double y, double z, std::string units_position);
         void update_position(double x, double y, double z);
 
-        double get_gravitational_force(const CelestialBody& other, double distance) const;
+        Vector3 get_gravitational_force(const CelestialBody& other) const;
 
         friend std::ostream& operator<<(std:: ostream& os, const CelestialBody& s);
 };
