@@ -1,0 +1,30 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: Build Space Simulator",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}\\simulator.cpp",
+                "${workspaceFolder}\\Vector3.cpp",
+                "${workspaceFolder}\\CelestialBody.cpp",
+                "-o",
+                "${workspaceFolder}\\simulator.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build Space Simulator"
+        }
+    ],
+    "version": "2.0.0"
+}
