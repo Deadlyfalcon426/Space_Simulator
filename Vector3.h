@@ -21,6 +21,7 @@ class Vector3{
         void adjust(double x, double y, double z);
         void setUnits(std::string unit);
         void adjust(double x, char choice);
+        void scale(double scale_factor);
         //pythagorean with 3 
         double distanceTo(const Vector3& other) const;
         Vector3 difference(const Vector3& other) const;
