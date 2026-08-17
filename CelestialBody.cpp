@@ -61,6 +61,7 @@ Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other) const
     double new_x = diff.getX()/g_force_combine;
     double new_y = diff.getY()/g_force_combine;
     double new_z = diff.getZ()/g_force_combine;
+    //fix this
     Vector3 new_g_force = Vector3(new_x,new_y,new_z,other.get_position().getUnits(), "Force");
     return new_g_force;
 }
