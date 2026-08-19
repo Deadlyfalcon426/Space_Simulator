@@ -44,10 +44,10 @@ void Vector3::adjust(double x, char choice){
             this->x = x;
             break;
         case 'y':
-            this->y = y;
+            this->y = x;
             break;
         case 'z':
-            this->z=z;
+            this->z = x;
             break;
         default:
             std::cout<<"Error: Invalid dimension. Appropriate inputs are x, y, or z";

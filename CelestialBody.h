@@ -14,8 +14,8 @@ class CelestialBody {
         std::string units_mass;
     public:
         const double G = 6.67430*std::pow(10, -11);
-        CelestialBody(std::string name, double mass, double x, double y, double z, std::string units_position);
-        CelestialBody(std::string name, double mass, std::string units_position);
+        CelestialBody(std::string name, double mass, double x, double y, double z);
+        CelestialBody(std::string name, double mass);
         
         std::string get_name() const;
         Vector3 get_velocity() const;

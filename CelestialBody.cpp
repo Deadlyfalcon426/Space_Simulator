@@ -4,12 +4,24 @@
 #include "Vector3.h"
 #include "CelestialBody.h"
 
-CelestialBody::CelestialBody(std::string name, double mass, double x, double y, double z, std::string units_position)
-: name(name), mass(mass), position(Vector3(x,y,z,units_position, "Position")), acceleration(0,0,0, "", "Acceleration"), velocity(0,0,0, "", "Velocity")
+CelestialBody::CelestialBody(std::string name, double mass, double x, double y, double z)
+: 
+name(name), 
+mass(mass), 
+position(Vector3(x,y,z,"m", "Position")), 
+acceleration(0,0,0, "m/s^2", "Acceleration"), 
+velocity(0,0,0, "m/s", "Velocity"), 
+units_mass("kg")
 {
 }
-CelestialBody::CelestialBody(std::string name, double mass, std::string units)
-: name(name), mass(mass), position(Vector3(0,0,0,units, "Position")), acceleration(0,0,0, "m/s^2", "Acceleration"), velocity(0,0,0, "m/s", "Velocity")
+CelestialBody::CelestialBody(std::string name, double mass)
+: 
+name(name), 
+mass(mass), 
+position(Vector3(0,0,0,"m", "Position")), 
+acceleration(0,0,0, "m/s^2", "Acceleration"), 
+velocity(0,0,0, "m/s", "Velocity"),
+units_mass("kg")
 {
 }
 

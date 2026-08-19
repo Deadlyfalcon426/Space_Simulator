@@ -10,6 +10,7 @@
                 "${workspaceFolder}\\simulator.cpp",
                 "${workspaceFolder}\\Vector3.cpp",
                 "${workspaceFolder}\\CelestialBody.cpp",
+                "${workspaceFolder}\\PhysicsFunctions.cpp",
                 "-o",
                 "${workspaceFolder}\\simulator.exe"
             ],
