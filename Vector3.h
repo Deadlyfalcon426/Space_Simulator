@@ -8,16 +8,14 @@ class Vector3{
         double y;
         double z;
         std::string unit;
-        std::string type;
     public:
-        Vector3(double x, double y, double z, std::string unit, std::string type);
-
+        Vector3(double x, double y, double z, std::string unit);
+        Vector3(const Vector3& other);
         double getX() const;
         double getY() const;
         double getZ() const;
         double getMagnitude() const;
         std::string getUnits() const;
-        std::string getType() const;
         void adjust(double x, double y, double z);
         void setUnits(std::string unit);
         void adjust(double x, char choice);

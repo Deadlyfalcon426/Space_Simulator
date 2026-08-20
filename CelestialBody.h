@@ -32,6 +32,7 @@ class CelestialBody {
         void set_acceleration(Vector3 new_acceleration);
         void update_position(double x, double y, double z, std::string units_position);
         void update_position(double x, double y, double z);
+        void update_position(Vector3 speed, double time);
 
         Vector3 get_gravitational_force(const CelestialBody& other, std::string units_force) const;
 

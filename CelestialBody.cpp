@@ -8,9 +8,9 @@ CelestialBody::CelestialBody(std::string name, double mass, double x, double y, 
 : 
 name(name), 
 mass(mass), 
-position(Vector3(x,y,z,"m", "Position")), 
-acceleration(0,0,0, "m/s^2", "Acceleration"), 
-velocity(0,0,0, "m/s", "Velocity"), 
+position(Vector3(x,y,z,"m")), 
+acceleration(0,0,0, "m/s^2"), 
+velocity(0,0,0, "m/s"), 
 units_mass("kg")
 {
 }
@@ -18,9 +18,9 @@ CelestialBody::CelestialBody(std::string name, double mass)
 : 
 name(name), 
 mass(mass), 
-position(Vector3(0,0,0,"m", "Position")), 
-acceleration(0,0,0, "m/s^2", "Acceleration"), 
-velocity(0,0,0, "m/s", "Velocity"),
+position(Vector3(0,0,0,"m")), 
+acceleration(0,0,0, "m/s^2"), 
+velocity(0,0,0, "m/s"),
 units_mass("kg")
 {
 }
@@ -74,6 +74,10 @@ void CelestialBody::update_position(double x, double y, double z, std::string un
 void CelestialBody::update_position(double x, double y, double z){
     position.adjust(x,y,z);
 }
+void CelestialBody::update_position(Vector3 speed, double time){
+    Vector3 new_distance = Vector3(speed.getX()*time, speed.getY()*time, speed.getZ()*time, "m");
+    position.sum(new_distance);
+}
 
 Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other, std::string units_force) const{
     double distance = position.distanceTo(other.get_position());
@@ -82,7 +86,7 @@ Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other, std::
     double new_x = diff.getX() / distance * g_force_combine;
     double new_y = diff.getY() / distance * g_force_combine;
     double new_z = diff.getZ() / distance * g_force_combine;
-    Vector3 new_g_force = Vector3(new_x,new_y,new_z,units_force, "Force");
+    Vector3 new_g_force = Vector3(new_x,new_y,new_z,units_force);
     return new_g_force;
 }
 
