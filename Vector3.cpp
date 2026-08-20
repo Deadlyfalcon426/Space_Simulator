@@ -34,10 +34,11 @@ double Vector3::getMagnitude() const{
 std::string Vector3::getUnits() const{
     return unit;
 }
-void Vector3::scale(double scale_factor){
-    this->x = x*scale_factor;
-    this->y = y*scale_factor;
-    this->z = z*scale_factor;
+Vector3 Vector3::scale(double scale_factor) const{
+    double new_x = x*scale_factor;
+    double new_y = y*scale_factor;
+    double new_z = z*scale_factor;
+    return Vector3(new_x,new_y,new_z,unit);
 }
 void Vector3::adjust(double x, double y, double z){
     this->x = x;

@@ -26,4 +26,12 @@ I can find the force between the two bodies as a single number, the forcem and t
 So what kind of unit conversion or whatever are we thinking? perhaps... before every function we are going to use unit conversions... in main or in each function as like a check? im thinking check in main, make a unit translating function (gonna be a pain but seems a bit unavoidable for my purposes) then throw errors in the actual thing cause I dont want to return faulty vectors? error handling idk how it is in C++ probably not that bad to set up, probably not as simple as javas as we had to suffer a little bit just to have freaking class files
 
 Random thought: order vector<CelestialBody> by something? mass?
+
 maybe a overloaded vector3::adjust with Vector3 parameter
+
+We can probably lower like time comp. because g force on two planets equals each other. this leads to less of an O(n^2) net gravity calculation and a faster one where we like do the same thing but we also use memoisation to keep running net forces of all planets, then keep adding to them instead of like using .adjust and doing them one by one.
+WHOAH THIS IS SUPER COOL
+I related that this would mean the amount of gravity calculations is equal to the amount of combinations of 2
+so then using n choose r with n being n and r being 2(2 in each), i found that, after simplifying, the amount of calculations would have been (1/2) * (n^2 - n), which is better than n^2 by a lot!
+its fun that i was able to apply discrete/statistics to a CS project, and I will definitely implement the new set up for net gravity calculations soon!
+Actually it's still O(n^2) in both cases, however it nearly halves the computational work involved.
