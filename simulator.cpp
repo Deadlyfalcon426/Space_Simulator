@@ -25,8 +25,8 @@ signed main() {
     //CelestialBodies.push_back(mars);
 
     print_heavenly_vector(CelestialBodies);
-    //31104000 <- seconds in a year
-    //2592000 <- seconds in a month
+    //31556952 <- seconds in a year
+    //2629746 <- seconds in a month
     //86400 <- seconds in a day
     double time ; std::cout<<"Time to sim? -> "; std::cin>>time;
     double step ; std::cout<<"Time per step? -> "; std::cin>>step;

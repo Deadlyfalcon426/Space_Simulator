@@ -91,7 +91,7 @@ Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other) const
 Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other, const Vector3& new_position, const Vector3& new_position_other) const{
     double distance = new_position.distanceTo(new_position_other);
     double g_force_combine = G * this->mass * other.get_mass() / distance / distance;
-    Vector3 diff = new_position.difference(new_position_other);
+    Vector3 diff = new_position_other.difference(new_position);
     double new_x = diff.getX() / distance * g_force_combine;
     double new_y = diff.getY() / distance * g_force_combine;
     double new_z = diff.getZ() / distance * g_force_combine;

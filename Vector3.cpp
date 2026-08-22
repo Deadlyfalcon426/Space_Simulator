@@ -2,6 +2,7 @@
 #include <string>
 #include "Vector3.h"
 #include <cmath>
+#include <stdexcept>
 
 Vector3::Vector3(double x, double y, double z, std::string unit)
     : 
@@ -78,12 +79,14 @@ double Vector3::distanceTo(const Vector3& other) const{
 Vector3 Vector3::difference(const Vector3& other) const{
     if(other.getUnits()!=unit){
         std::cout<<"Unit mismatch for difference: Defaulting to units passed in argument Vector3 object.";
+        throw std::runtime_error("");
     }
     return Vector3(this->x-other.getX(), this->y-other.getY(), this->z-other.getZ(), other.getUnits());
 }
 Vector3 Vector3::sum(const Vector3& other) const{
     if(other.getUnits()!=unit){
         std::cout<<"Unit mismatch: Defaulting to units passed in argument Vector3 object.";
+        throw std::runtime_error("");
     }
     return Vector3(this->x+other.getX(), this->y+other.getY(), this->z+other.getZ(), other.getUnits());
 }

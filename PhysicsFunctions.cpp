@@ -275,17 +275,23 @@ void runge_kutta_4_step(std::vector<CelestialBody>& heavenly_vector, double dt){
 }
 
 void sim(std::vector<CelestialBody>& heavenly_vector, double time_passed, double base_step, std::string choice){
-    int steps = time_passed/base_step;
+    double steps = time_passed/base_step;
     if(choice=="RK4"){
         for(double i = 0; i<steps;i++){
             runge_kutta_4_step(heavenly_vector, base_step);
+            //debug
+            //std::cout<<heavenly_vector[0]<<"\n"<<heavenly_vector[1];
         }
     } else if(choice=="Euler"){
         for(double i = 0; i<steps;i++){
             euler_step(heavenly_vector, base_step);
+            //debug
+            //std::cout<<heavenly_vector[0]<<"\n"<<heavenly_vector[1];
         }
     } else{
         std::cout<<"Invalid choice of numerical analysis. \nChoose either RK4 or Euler.\n";
+        std::cin>>choice;
+        sim(heavenly_vector, time_passed, base_step, choice);
     }
 }
 void print_heavenly_vector(std::vector<CelestialBody>& heavenly_vector){
