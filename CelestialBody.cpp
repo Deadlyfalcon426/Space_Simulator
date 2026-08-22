@@ -55,7 +55,7 @@ void CelestialBody::set_velocity(double x, double y, double z){
     velocity.adjust(x,y,z);
 }
 void CelestialBody::set_velocity(Vector3 new_velocity){
-    velocity.adjust(new_velocity.getX(),new_velocity.getY(),new_velocity.getZ());
+    velocity.adjust(new_velocity);
 }
 void CelestialBody::set_acceleration(double x, double y, double z, std::string units_acceleration){
     acceleration.adjust(x,y,z);
@@ -65,7 +65,7 @@ void CelestialBody::set_acceleration(double x, double y, double z){
     acceleration.adjust(x,y,z);
 }
 void CelestialBody::set_acceleration(Vector3 new_acceleration){
-    acceleration.adjust(new_acceleration.getX(),new_acceleration.getY(),new_acceleration.getZ());
+    acceleration.adjust(new_acceleration);
 }
 void CelestialBody::update_position(double x, double y, double z, std::string units_position){
     position.adjust(x,y,z);
@@ -79,18 +79,25 @@ void CelestialBody::update_position(Vector3 speed, double time){
     position = position.sum(new_distance);
 }
 
+void CelestialBody::update_position(Vector3 new_position){
+    position.adjust(new_position);
+}
+
 Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other) const{
-    double distance = position.distanceTo(other.get_position());
+    return get_gravitational_force(other, position, other.get_position());
+}
+
+
+Vector3 CelestialBody::get_gravitational_force(const CelestialBody& other, const Vector3& new_position, const Vector3& new_position_other) const{
+    double distance = new_position.distanceTo(new_position_other);
     double g_force_combine = G * this->mass * other.get_mass() / distance / distance;
-    Vector3 diff = position.difference(other.get_position());
+    Vector3 diff = new_position.difference(new_position_other);
     double new_x = diff.getX() / distance * g_force_combine;
     double new_y = diff.getY() / distance * g_force_combine;
     double new_z = diff.getZ() / distance * g_force_combine;
     Vector3 new_g_force = Vector3(new_x,new_y,new_z,"N");
     return new_g_force;
 }
-
-
 
 std::ostream& operator<<(std:: ostream& os, const CelestialBody& s){
     return os << 

@@ -45,6 +45,9 @@ void Vector3::adjust(double x, double y, double z){
     this->y = y;
     this->z = z;
 }
+void Vector3::adjust(Vector3& new_guy){
+    adjust(new_guy.getX(), new_guy.getY(), new_guy.getZ());
+}
 void Vector3::setUnits(std::string unit){
     this->unit = unit;
 }
@@ -84,6 +87,23 @@ Vector3 Vector3::sum(const Vector3& other) const{
     }
     return Vector3(this->x+other.getX(), this->y+other.getY(), this->z+other.getZ(), other.getUnits());
 }
+
+Vector3 Vector3::operator+(const Vector3& other) const{
+    return sum(other);
+}
+Vector3 Vector3::operator-(const Vector3& other) const{
+    return difference(other);
+}
+Vector3 Vector3::operator*(double scalar) const{
+    return scale(scalar);
+}
+Vector3 operator*(double scalar, const Vector3& v){
+    return v.scale(scalar);
+}
+Vector3 Vector3::operator/(double scalar) const{
+    return scale(1/scalar);
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector3& s){
             return os 
                 << "(" 

@@ -33,8 +33,10 @@ class CelestialBody {
         void update_position(double x, double y, double z, std::string units_position);
         void update_position(double x, double y, double z);
         void update_position(Vector3 speed, double time);
+        void update_position(Vector3 new_position);
 
         Vector3 get_gravitational_force(const CelestialBody& other) const;
+        Vector3 get_gravitational_force(const CelestialBody& other, const Vector3& new_position, const Vector3& new_position_other) const;
 
         friend std::ostream& operator<<(std:: ostream& os, const CelestialBody& s);
 };

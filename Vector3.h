@@ -19,10 +19,17 @@ class Vector3{
         void adjust(double x, double y, double z);
         void setUnits(std::string unit);
         void adjust(double x, char choice);
+        //we've gone TOO long without this one below
+        void adjust(Vector3& new_guy);
         Vector3 scale(double scale_factor) const;
         //pythagorean with 3 
         double distanceTo(const Vector3& other) const;
         Vector3 difference(const Vector3& other) const;
         Vector3 sum(const Vector3& other) const;
+        Vector3 operator+(const Vector3& other) const;
+        Vector3 operator-(const Vector3& other) const;
+        Vector3 operator*(double scalar) const;
+        friend Vector3 operator*(double scalar, const Vector3& v);
+        Vector3 operator/(double scalar) const;
         friend std::ostream& operator<<(std::ostream& os, const Vector3& s);
 };

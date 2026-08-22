@@ -22,7 +22,7 @@ signed main() {
     CelestialBody mars = CelestialBody("Mars", 6.417*std::pow(10, 23));
     mars.update_position(2.49*std::pow(10, 11),0,0);
     mars.set_velocity(0,0,2.19424229375*std::pow(10, 4));//used vis-viva!
-    CelestialBodies.push_back(mars);
+    //CelestialBodies.push_back(mars);
 
     print_heavenly_vector(CelestialBodies);
     //31104000 <- seconds in a year

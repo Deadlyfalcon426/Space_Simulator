@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include <cmath>
 #include "PhysicsFunctions.h"
+#include "rk4_variables.h"
 #include <stdexcept>
 
 struct pair {
@@ -12,42 +13,6 @@ struct pair {
     pair(int uno, int dos) : uno(uno), dos(dos) {}
 };
 
-struct rk4_variables {
-    Vector3 const v_0;
-    Vector3 const r_0;
-    Vector3 current_r;
-    Vector3 current_v;
-    Vector3 k1_r;
-    Vector3 k2_r;
-    Vector3 k3_r;
-    Vector3 k4_r;
-    Vector3 k1_v;
-    Vector3 k2_v;
-    Vector3 k3_v;
-    Vector3 k4_v;
-    Vector3 a_0;
-    Vector3 a_mid1;
-    Vector3 a_mid2;
-    Vector3 a_end;
-    rk4_variables(Vector3 current_r, Vector3 current_v, Vector3 a_0): 
-    current_r(current_r), 
-    current_v(current_v),
-    r_0(current_r),
-    v_0(current_v),
-    k1_r(0,0,0,"m"),
-    k2_r(0,0,0,"m"),
-    k3_r(0,0,0,"m"),
-    k4_r(0,0,0,"m"),
-    k1_v(0,0,0,"m/s"),
-    k2_v(0,0,0,"m/s"),
-    k3_v(0,0,0,"m/s"),
-    k4_v(0,0,0,"m/s"),
-    a_0(a_0),
-    a_mid1(0,0,0,"m/s^2"),
-    a_mid2(0,0,0,"m/s^2"),
-    a_end(0,0,0,"m/s^2")
-    {}
-};
 
 void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences){
     int n = gravitational_influences.size();
@@ -71,18 +36,49 @@ void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences){
     }
     //now that we have found all net forces we can apply the forces to find acceleration
     for(int body_index = 0; body_index<n;body_index++){
-        applyForce(gravitational_influences[body_index], net_forces[body_index]);
+        gravitational_influences[body_index].set_acceleration(applyForce(gravitational_influences[body_index], net_forces[body_index]));
     }
 }
 
 
-void applyForce(CelestialBody& body_of_interest, Vector3 force){
+void update_runge_kutta_acceleration(std::vector<CelestialBody>& gravitational_influences, std::vector<RK4::rk4_variables>& variables){
+    int n = variables.size();
+    std::vector<Vector3> net_forces = std::vector(n, Vector3(0, 0, 0, "N"));
+    std::vector<pair> pairs = std::vector(((n*n)-n)/2, pair(0,0));
+    int counter = 0;
+    for(int i = 0; i<n-1;i++){
+        for(int j = i+1; j<n;j++){
+            pairs[counter].uno = i;
+            pairs[counter].dos = j;
+            counter++;
+        }
+    }
+    for(pair& pair_ : pairs){
+        CelestialBody& body1 = gravitational_influences[pair_.uno];
+        CelestialBody& body2 = gravitational_influences[pair_.dos];
+        Vector3 new_g_force = body1.get_gravitational_force(body2, variables[pair_.uno].current_r, variables[pair_.dos].current_r);
+        Vector3 opp_new_g_force = new_g_force.scale(-1);
+        net_forces[pair_.uno] = net_forces[pair_.uno].sum(new_g_force);
+        net_forces[pair_.dos] = net_forces[pair_.dos].sum(opp_new_g_force);
+    }
+    counter=0;
+    for(RK4::rk4_variables& current : variables){
+        current.current_a = applyForce(gravitational_influences[counter], net_forces[counter]);
+        counter++;
+    }
+}
+
+Vector3 applyForce(CelestialBody& body_of_interest, Vector3 force){
     if(force.getUnits()!="N"){
         std::cout<<"The vector given is not of the appropriate unit, \"N\"";
+        throw std::runtime_error("");
+        return Vector3(0,0,0,"I should not exist");
     } else{
         double mass = body_of_interest.get_mass();
         force = force.scale(1/mass);
-        body_of_interest.set_acceleration(force);
+        force.setUnits("m/s^2");
+        Vector3 acceleration = force;
+        return acceleration;
     }
 }
 
@@ -152,75 +148,129 @@ void runge_kutta_4_step(std::vector<CelestialBody>& heavenly_vector, double dt){
         k1_v = dt * a_0 (nothing is breaking each other yet! no overlap!)
         essentially just an euler step? a foot into the dark?
     */
-    //calculate all initial accelerations:
-    all_g_acceleration(heavenly_vector);
     //ok stop freaking out we only need to iterate over one vector goddamn it. 
     //all the weird inter-body stuff is handled by the beautiful all_g_acceleration(), 
     //so i can just focus on setting up kinematics and making sure to call the acceleration thingy
-    std::vector<rk4_variables> rk4;
-    int counter = 0;
+    std::vector<RK4::rk4_variables> rk4;
     for(CelestialBody& body : heavenly_vector){
         //add in the initial r_0, v_0, a_0.
-        rk4.push_back(rk4_variables(body.get_position(), body.get_velocity(), body.get_acceleration()));
+        rk4.push_back(RK4::rk4_variables(body.get_position(), body.get_velocity()));
+    }
+    //in between we gotta do accelerations
+    update_runge_kutta_acceleration(heavenly_vector, rk4);
+    for(RK4::rk4_variables& current : rk4){
         //next we just multiply in the dt
-        rk4[counter].k1_r = rk4[counter].r_0.scale(dt);
-        rk4[counter].k1_r.setUnits("m");
-        rk4[counter].k1_v = rk4[counter].a_0.scale(dt);
-        rk4[counter].k1_v.setUnits("m/s");
-        counter++;
+        current.k1_r = current.v_0.scale(dt);
+        current.k1_r.setUnits("m");
+        current.k1_v = current.current_a.scale(dt);
+        current.k1_v.setUnits("m/s");
     }
     /*
     Stage 2:
         next, we start getting weird
         looking back, it feels kind of safe to call this the euler half-step
-        r_2 = (r_0 + k1_r)/2            <- find the radius midpoint
-        v_2 = (v_0 + k1_v)/2            <- find the velocity midpoint
+        r_2 = r_0 + k1_r/2            <- find the radius midpoint
+        v_2 = v_0 + k1_v/2            <- find the velocity midpoint
         a_mid1 = acceleration at r_2    <- find the acceleration at the radius midpoint
         k2_r = dt * v_2                 <- find the radius at the velocity midpoint
         k2_v = dt * a_mid1              <- find the velocity at the radius midpoint
         this is kinda sexy because it like intertwines the two... damn i didnt think it would be half as cool as this
     */
-    counter = 0;
-    for(CelestialBody& body : heavenly_vector){
-        rk4_variables& current = rk4[counter];
+    for(RK4::rk4_variables& current : rk4){
         //that should find the radius midpoint
-        current.current_r = (current.k1_r.sum(current.r_0)).scale(0.5);
+        current.current_r = (current.k1_r.scale(0.5)).sum(current.r_0);
         //that should find the velocity midpoint
-        counter++;
+        current.current_v = (current.k1_v.scale(0.5)).sum(current.v_0);
+        //yeah lowk dead end here bruh how we gonna set up g acceleration with the current function???
+        //ima sleep then handle this BS
+        //🤣✌️
+        //well due to great project design (not) it didnt take that long to set up a new system, one im kinda happy with
+    }
+    //find the acceleration at the radius midpoint
+    update_runge_kutta_acceleration(heavenly_vector, rk4);
+    for(RK4::rk4_variables& current : rk4){
+        //find the radius at the velocity midpoint
+        current.k2_r = current.current_v.scale(dt);
+        current.k2_r.setUnits("m");
+        //find the velocity at the radius midpoint
+        current.k2_v = current.current_a.scale(dt);
+        current.k2_v.setUnits("m/s");
     }
     /*
         Stage 3:
         so same part but reversed technically, we sucessfully intertwine the two differential equations
         looking back i think an appropriate name for this is the linking step, maybe the reverse euler step
-        r_3 = (r_0 + k2_r)/2    <- find midpoint of the velocity-based new position and the initial position
-        v_3 = (r_0 + k2_v)/2    <- find midpoint of the position-based new velocity and the initial velocity
+        r_3 = r_0 + k2_r/2    <- find midpoint of the velocity-based new position and the initial position
+        v_3 = v_0 + k2_v/2    <- find midpoint of the position-based new velocity and the initial velocity
         a_mid2 = acceleration at r_3    <- find the acceleration at the velocity-based positional midpoint
         k3_r = dt * v_3     <- return the position given the velocity at the position-based velocity midpoint! 
         this assumes midpoint speed throughout.
         k3_v = dt * a_mid2      <- return the velocity given the acceleration-that is based on the velocity-based positional midpoint! 
         this assumes midpoint acceleration throughout.
     */
+    for(RK4::rk4_variables& current : rk4){
+        //find midpoint of the velocity-based new position and the initial position
+        current.current_r = current.r_0.sum(current.k2_r.scale(0.5));
+        //find midpoint of the position-based new velocity and the initial velocity
+        current.current_v = current.v_0.sum(current.k2_v.scale(0.5));
+    }
+    //find the acceleration at the velocity-based positional midpoint
+    update_runge_kutta_acceleration(heavenly_vector, rk4);
+    for(RK4::rk4_variables& current : rk4){
+        //return the position given the velocity at the position-based velocity midpoint! 
+        //this assumes midpoint speed throughout.
+        current.k3_r = current.current_v.scale(dt);
+        current.k3_r.setUnits("m");
+        //return the velocity given the acceleration-that is based on the velocity-based positional midpoint! 
+        //this assumes midpoint acceleration throughout.
+        current.k3_v = current.current_a.scale(dt);
+        current.k3_v.setUnits("m/s");
+    }
     /*
         Stage 4: 
-        maybe this helps balance the numbers and prevent false energy gather?
-        i was right, it kind of inflicts a bit of a negative effect, 
-        like when you pull a rubber band and let go, this part is useful in the snap-back
-        r_4 = k3_r + r_0    <-here we add the position change, 
+        idk abt this step, it feels like its there to balance out the effect of the first stage
+        i feel that way because first stage -> initial velocities, stage 4 -> last calculated velocity
+        sort of like averaging out the weirdness runge-kutta made with the initial euler assumption step
+        r_4 = k3_r + r_0    <- idk yo ✌️
         v_4 = k3_v + v_0    <-
         a_end = acceleration at r_4 <-adds acceleration, but notably at the end and not the midpoint.
-        this could mean that the acceleration sort of exceeds range a little bit and pulls back or at least slows?
         k4_r = dt * v_4
         k4_v = dt * a_end
         this step sort of confuses me but i think i have enough understanding
     */
+   for(RK4::rk4_variables& current : rk4){
+        //im lowk baffled idk
+        current.current_r = current.r_0.sum(current.k3_r);
+        //
+        current.current_v = current.v_0.sum(current.k3_v);
+    }
+    //acceleration at r_4 <-adds acceleration, but notably at the end and not the midpoint.
+    update_runge_kutta_acceleration(heavenly_vector, rk4);
+    for(RK4::rk4_variables& current : rk4){
+        //k4_r = dt * v_4
+        current.k4_r = current.current_v.scale(dt);
+        current.k4_r.setUnits("m");
+        //k4_v = dt * a_end
+        current.k4_v = current.current_a.scale(dt);
+        current.k4_v.setUnits("m/s");
+    }
     /*
         Stage 5, Final:
         use initial runge-kutta equation:
         new y = old y + (k1 + 2k2 + 2k3 + k4) / 6
         notice that the midpoint parts have a multiplier and the full parts dont. 
-        and i guess then that the reason that the divisor isnt just the average divisor (4), 
-        it may be six because we add in the r_0/k_0 at a few points and it accounts for it?
+        this is to weight the midpoint ones higher, specifically they are each twice as important as just the k1 or k4
     */
+    int counter = 0;
+    for(CelestialBody& body : heavenly_vector){
+        RK4::rk4_variables& current = rk4[counter];
+        body.update_position(current.r_0 + ( ( current.k1_r + (2 * current.k2_r) + (2 * current.k3_r) + current.k4_r) / 6 ) );
+        body.set_velocity(current.v_0 + ( ( current.k1_v + (2 * current.k2_v) + (2 * current.k3_v) + current.k4_v) / 6 ) );
+        //display number, not actually used but it would be weird not to have one and just have 0,0,0
+        //this might have room for improvement, so keep an eye on it
+        body.set_acceleration(current.current_a);
+        counter++;
+    }
 
 }
 

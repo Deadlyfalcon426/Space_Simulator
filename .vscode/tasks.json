@@ -11,6 +11,7 @@
                 "${workspaceFolder}\\Vector3.cpp",
                 "${workspaceFolder}\\CelestialBody.cpp",
                 "${workspaceFolder}\\PhysicsFunctions.cpp",
+                "${workspaceFolder}\\rk4_variables.cpp",
                 "-o",
                 "${workspaceFolder}\\simulator.exe"
             ],

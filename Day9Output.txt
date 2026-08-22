@@ -1,0 +1,55 @@
+Working RK4
+All bodies in current system: 
+----------------------------------------
+Name: Sun
+Mass: 1.989e+30
+Velocity: (0, 0, 0) Units: m/s
+Acceleration: (0, 0, 0) Units: m/s^2
+Position: (0, 0, 0) Units: m
+
+
+Name: Earth
+Mass: 5.9722e+24
+Velocity: (0, 0, 29300) Units: m/s
+Acceleration: (0, 0, 0) Units: m/s^2
+Position: (1.52088e+11, 0, 0) Units: m
+
+
+Name: Mars
+Mass: 6.417e+23
+Velocity: (0, 0, 21942.4) Units: m/s
+Acceleration: (0, 0, 0) Units: m/s^2
+Position: (2.49e+11, 0, 0) Units: m
+
+
+
+----------------------------------------
+Time to sim? -> 31104000
+Time per step? -> 60
+Euler or RK4 numerical analysis? -> RK4
+All bodies in current system: 
+----------------------------------------
+Name: Sun
+Mass: 1.989e+30
+Velocity: (-0.0804588, 0, -0.0426531) Units: m/s
+Acceleration: (-1.24305e-10, 0, -1.8011e-10) Units: m/s^2
+Position: (-2.14322e+06, 0, -995149) Units: m
+
+
+Name: Earth
+Mass: 5.9722e+24
+Velocity: (24773.5, 0, 42545.3) Units: m/s
+Acceleration: (3.40326e-05, 0, 5.09578e-05) Units: m/s^2
+Position: (8.17458e+11, 0, 1.224e+12) Units: m
+
+
+Name: Mars
+Mass: 6.417e+23
+Velocity: (18824.9, 0, 30877.1) Units: m/s
+Acceleration: (6.85587e-05, 0, 8.40077e-05) Units: m/s^2
+Position: (6.99573e+11, 0, 8.57232e+11) Units: m
+
+
+
+----------------------------------------
+PS C:\Users\ahsmn\Desktop\Code\Space_Simulator> 
