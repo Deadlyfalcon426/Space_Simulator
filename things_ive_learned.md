@@ -13,6 +13,7 @@ well its actually aphelion apparently because the sun: just put in the value as 
 BIG THING: EARTH HAS INITIAL VELOCITY, AS WELL AS OTHER PLANETS PLEASE ADD THIS IN AT SOME POINT
 interesting read for later: https://www.quora.com/What-is-the-velocity-of-Earth-at-perihelion-and-aphelion-How-is-this-information-calculated
 vis-viva equation!
+the vis-viva equation was implemented to find mars' aphelion distance. we could implement it automatically for all planets but it's kinda dumb because you need semi-major axis to calculate with vis-viva, then you need like a rabbit hole of stuff to find the semi-major, one option's the orbital period->major axis, or periapsis & apoapsis -> major axis, its like endless, its not something you can calculate with just mass or whatever, so we'll stick to googling the semi-major axis and then calculating apogee/aphelion
 # Mathematics:
 will mostly stick to paper for now
 for 3d vector V -> (3,5,8), with displacement -> d = sqrt( dx^2 + dy^2 + dx^2 ) = sqrt(9+25+64) = 98
@@ -22,12 +23,16 @@ I Initially thought of using a position class that I could assign to different o
 TL:DR of that is that instead of just a position class, we can use a vector class because its mathematical definition covers all the stuff we need.
 
 I can find the force between the two bodies as a single number, the forcem and then I don't know how to split it. I also need to split it appropriately, meaning it must be in the direction of the other planetary body. Maybe we find the angle of them from each others positions, like relative to the origin somehow? Then we use some angle formula to split the full magnitude 3d-vector into 3 components, just like how you would do so with a 2d-vector. I thought I could get away without implementing an angle system because I couldn't figure it out, but I guess that's what we're doing!
+No angle system was implemented, we used the distance vector for direction and scaled it based on the one-number force we calculated.
 
 So what kind of unit conversion or whatever are we thinking? perhaps... before every function we are going to use unit conversions... in main or in each function as like a check? im thinking check in main, make a unit translating function (gonna be a pain but seems a bit unavoidable for my purposes) then throw errors in the actual thing cause I dont want to return faulty vectors? error handling idk how it is in C++ probably not that bad to set up, probably not as simple as javas as we had to suffer a little bit just to have freaking class files
+This is resolved with pretty much uniform units and .type removed
 
 Random thought: order vector<CelestialBody> by something? mass?
+No, ordering the vector would have no effect because acceleration, velocity and positon are already seperated and like basically nothing relies on order.
 
 maybe a overloaded vector3::adjust with Vector3 parameter
+Yes lets do that
 
 We can probably lower like time comp. because g force on two planets equals each other. this leads to less of an O(n^2) net gravity calculation and a faster one where we like do the same thing but we also use memoisation to keep running net forces of all planets, then keep adding to them instead of like using .adjust and doing them one by one.
 WHOAH THIS IS SUPER COOL
