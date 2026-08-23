@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "CelestialBody.h"
-#include "Vector3.h"
+#include "PhysicsVector3.h"
 #include <cmath>
 #include "PhysicsFunctions.h"
 #include "rk4_variables.h"
@@ -16,7 +16,7 @@ struct pair {
 
 void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences){
     int n = gravitational_influences.size();
-    std::vector<Vector3> net_forces = std::vector(n, Vector3(0, 0, 0, "N"));
+    std::vector<PhysicsVector3> net_forces = std::vector(n, PhysicsVector3(0, 0, 0, "N"));
     std::vector<pair> pairs = std::vector(((n*n)-n)/2, pair(0,0));
     int counter = 0;
     for(int i = 0; i<n-1;i++){
@@ -29,8 +29,8 @@ void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences){
     for(pair& pair_ : pairs){
         CelestialBody& body1 = gravitational_influences[pair_.uno];
         CelestialBody& body2 = gravitational_influences[pair_.dos];
-        Vector3 new_g_force = body1.get_gravitational_force(body2);
-        Vector3 opp_new_g_force = new_g_force.scale(-1);
+        PhysicsVector3 new_g_force = body1.get_gravitational_force(body2);
+        PhysicsVector3 opp_new_g_force = new_g_force.scale(-1);
         net_forces[pair_.uno] = net_forces[pair_.uno].sum(new_g_force);
         net_forces[pair_.dos] = net_forces[pair_.dos].sum(opp_new_g_force);
     }
@@ -43,7 +43,7 @@ void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences){
 
 void update_runge_kutta_acceleration(std::vector<CelestialBody>& gravitational_influences, std::vector<RK4::rk4_variables>& variables){
     int n = variables.size();
-    std::vector<Vector3> net_forces = std::vector(n, Vector3(0, 0, 0, "N"));
+    std::vector<PhysicsVector3> net_forces = std::vector(n, PhysicsVector3(0, 0, 0, "N"));
     std::vector<pair> pairs = std::vector(((n*n)-n)/2, pair(0,0));
     int counter = 0;
     for(int i = 0; i<n-1;i++){
@@ -56,8 +56,8 @@ void update_runge_kutta_acceleration(std::vector<CelestialBody>& gravitational_i
     for(pair& pair_ : pairs){
         CelestialBody& body1 = gravitational_influences[pair_.uno];
         CelestialBody& body2 = gravitational_influences[pair_.dos];
-        Vector3 new_g_force = body1.get_gravitational_force(body2, variables[pair_.uno].current_r, variables[pair_.dos].current_r);
-        Vector3 opp_new_g_force = new_g_force.scale(-1);
+        PhysicsVector3 new_g_force = body1.get_gravitational_force(body2, variables[pair_.uno].current_r, variables[pair_.dos].current_r);
+        PhysicsVector3 opp_new_g_force = new_g_force.scale(-1);
         net_forces[pair_.uno] = net_forces[pair_.uno].sum(new_g_force);
         net_forces[pair_.dos] = net_forces[pair_.dos].sum(opp_new_g_force);
     }
@@ -68,23 +68,23 @@ void update_runge_kutta_acceleration(std::vector<CelestialBody>& gravitational_i
     }
 }
 
-Vector3 applyForce(CelestialBody& body_of_interest, Vector3 force){
+PhysicsVector3 applyForce(CelestialBody& body_of_interest, PhysicsVector3 force){
     if(force.getUnits()!="N"){
         std::cout<<"The vector given is not of the appropriate unit, \"N\"";
         throw std::runtime_error("");
-        return Vector3(0,0,0,"I should not exist");
+        return PhysicsVector3(0,0,0,"I should not exist");
     } else{
         double mass = body_of_interest.get_mass();
         force = force.scale(1/mass);
         force.setUnits("m/s^2");
-        Vector3 acceleration = force;
+        PhysicsVector3 acceleration = force;
         return acceleration;
     }
 }
 
 void updateVelocity(CelestialBody& target, double dt){
-    Vector3 acceleration    = target.get_acceleration();
-    Vector3 velocity        = target.get_velocity();
+    PhysicsVector3 acceleration    = target.get_acceleration();
+    PhysicsVector3 velocity        = target.get_velocity();
 
     //basically just kinematics, but with 3d vectors!
     acceleration = acceleration.scale(dt);

@@ -1,16 +1,19 @@
 #include <iostream>
 #include <vector>
 #include "CelestialBody.h"
-#include "Vector3.h"
+#include "PhysicsVector3.h"
 #include <cmath>
 #include "PhysicsFunctions.h"
 #include <string>
-
+#include <raylib.h>
 signed main() {
+    
+
+
     //initial set up
-    Vector3 origin = Vector3(0,0,0,"m");
+    PhysicsVector3 origin = PhysicsVector3(0,0,0,"m");
     std::vector<CelestialBody> CelestialBodies;
-    std::vector<Vector3> initial_positions;
+    std::vector<PhysicsVector3> initial_positions;
     //sun
     CelestialBody sun = CelestialBody("Sun", 1.989*std::pow(10, 30));
     CelestialBodies.push_back(sun);

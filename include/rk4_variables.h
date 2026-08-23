@@ -1,24 +1,24 @@
 #pragma once
-#include "Vector3.h"
+#include "PhysicsVector3.h"
 namespace RK4{
     struct rk4_variables {
-        Vector3 const v_0;
-        Vector3 const r_0;
+        PhysicsVector3 const v_0;
+        PhysicsVector3 const r_0;
 
-        Vector3 current_r;
-        Vector3 current_v;
-        Vector3 current_a;
+        PhysicsVector3 current_r;
+        PhysicsVector3 current_v;
+        PhysicsVector3 current_a;
 
-        Vector3 k1_r;
-        Vector3 k2_r;
-        Vector3 k3_r;
-        Vector3 k4_r;
+        PhysicsVector3 k1_r;
+        PhysicsVector3 k2_r;
+        PhysicsVector3 k3_r;
+        PhysicsVector3 k4_r;
 
-        Vector3 k1_v;
-        Vector3 k2_v;
-        Vector3 k3_v;
-        Vector3 k4_v;
+        PhysicsVector3 k1_v;
+        PhysicsVector3 k2_v;
+        PhysicsVector3 k3_v;
+        PhysicsVector3 k4_v;
 
-        rk4_variables(Vector3 current_r, Vector3 current_v);
+        rk4_variables(PhysicsVector3 current_r, PhysicsVector3 current_v);
     };
 }

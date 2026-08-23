@@ -1,8 +1,8 @@
 #include "rk4_variables.h"
 
 RK4::rk4_variables::rk4_variables(
-    Vector3 current_r,
-    Vector3 current_v
+    PhysicsVector3 current_r,
+    PhysicsVector3 current_v
 )
     : current_r(current_r),
       current_v(current_v),

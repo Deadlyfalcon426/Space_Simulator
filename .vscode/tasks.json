@@ -7,13 +7,14 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\simulator.cpp",
-                "${workspaceFolder}\\Vector3.cpp",
+                "${workspaceFolder}\\main.cpp",
+                "${workspaceFolder}\\PhysicsVector3.cpp",
                 "${workspaceFolder}\\CelestialBody.cpp",
                 "${workspaceFolder}\\PhysicsFunctions.cpp",
                 "${workspaceFolder}\\rk4_variables.cpp",
+                "${workspaceFolder}\\renderer.cpp",
                 "-o",
-                "${workspaceFolder}\\simulator.exe"
+                "${workspaceFolder}\\main.exe"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

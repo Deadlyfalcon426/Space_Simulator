@@ -1,13 +1,13 @@
 #include <vector>
 #include <string>
-#include "Vector3.h"
+#include "PhysicsVector3.h"
 #include "CelestialBody.h"
 #include "rk4_variables.h"
 #pragma once
 
 void all_g_acceleration(std::vector<CelestialBody>& gravitational_influences);
 void all_g_acceleration_theoretical(std::vector<CelestialBody>& gravitational_influences, std::vector<RK4::rk4_variables>& variables);
-Vector3 applyForce(CelestialBody& body_of_interest, Vector3 force);
+PhysicsVector3 applyForce(CelestialBody& body_of_interest, PhysicsVector3 force);
 void updateVelocity(CelestialBody& target, double dt);
 
 void update_runge_kutta_acceleration(std::vector<CelestialBody>& gravitational_influences, std::vector<RK4::rk4_variables>& variables);
