@@ -195,7 +195,8 @@ https://github.com/user-attachments/assets/00dca0ca-760f-42cc-b367-1531dfc57468
 ## Credits
 
 **Project:** Orbital Simulator
-**Author:** [Ahsan Mohammed]([https://www.linkedin.com/in/ahsan-mohammed-b755373a2/]), computer science student in high school (as of 8/23/2026)
+
+**Author:** [Ahsan Mohammed](https://www.linkedin.com/in/ahsan-mohammed-b755373a2/), computer science student in high school (as of 8/23/2026)
 
 **Raylib:** Raylib is developed by Ramon Santamaria (@raysan5) and contributors.
 
