@@ -17,10 +17,11 @@ FetchContent_MakeAvailable(raylib)
 add_executable(Space_Simulator
     src/main.cpp
     src/PhysicsVector3.cpp
-    src/CelestialBody.cpp
-    src/PhysicsFunctions.cpp
     src/rk4_variables.cpp
+    src/CelestialBody.cpp
     src/renderer.cpp
+    src/PhysicsFunctions.cpp
+    
 )
 
 target_include_directories(Space_Simulator PRIVATE
