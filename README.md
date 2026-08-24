@@ -175,6 +175,9 @@ Then, you can type `"Euler"` or `"RK4"` for your numerical analysis method. Eule
 
 After completing all this, have a look at the simulation window, and also check back in your terminal to see the final values for the planets, as well as the difference from their starting locations.
 
+https://github.com/user-attachments/assets/00dca0ca-760f-42cc-b367-1531dfc57468
+
+
 ## Future Improvements
 
 * Orbital trails to further visualize paths
@@ -192,7 +195,7 @@ After completing all this, have a look at the simulation window, and also check 
 ## Credits
 
 **Project:** Orbital Simulator
-**Author:** Ahsan Mohammed, computer science student in high school (as of 8/23/2026)
+**Author:** [Ahsan Mohammed]([https://www.linkedin.com/in/ahsan-mohammed-b755373a2/]), computer science student in high school (as of 8/23/2026)
 
 **Raylib:** Raylib is developed by Ramon Santamaria (@raysan5) and contributors.
 
